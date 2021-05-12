@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import {observer} from 'mobx-react-lite'
+import {Component} from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import store1 from './components/learnTodos/stores'
+import TodosList from './components/learnTodos/todoList'
+
+import './App.css'
+
+
+
+
+@observer
+
+class App extends Component{
+
+ handleChange = (e) =>{
+    let userEnteredText = e.target.value
+    store1.searchText = userEnteredText
+  }
+
+  keyPress = (e) =>{
+    if(e.key === "Enter"){
+      store1.addNewTodo({todoTitle : this.state.searchText, todoId: Math.random()})
+      store1.searchText = "";
+    }
+  }
+
+  render(){
+    return <div className = "todosList-container">
+            <input type = "text" value = {store1.searchText} 
+            className = "input-field"
+            onChange = {this.handleChange} 
+            onKeyPress = {this.keyPress}
+            />
+            <TodosList todosList = {store1.todosList}/>
+          </div>
+  }
 }
 
-export default App;
+  
+
+ 
+
+  
+ 
+export default App
